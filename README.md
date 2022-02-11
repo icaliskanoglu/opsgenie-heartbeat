@@ -33,7 +33,7 @@ INFO[0003] Sending ping!                                 Heartbeat=IhsanTest
 ```yaml
 version: "3"
 services:
-  grafana:
+  opsgenie-heartbeat:
     image: ghcr.io/icaliskanoglu/opsgenie-heartbeat:latest
     restart: always
     environment:
