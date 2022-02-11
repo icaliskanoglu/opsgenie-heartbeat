@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: '1.17.7'
-      - run: go version
+      - run: go mod vendor
 
       - name: Log in to the Container registry
         uses: docker/login-action@v1
