@@ -136,6 +136,9 @@ func (h *HeartbeatConfig) PingPeriodiccally() {
 	}
 	totalDuration := time.Duration(h.Interval) * duration
 
+	//send ping before interval
+	totalDuration -= time.Second * 30
+
 	log.WithField(fmt.Sprintf("Interval(%s)", h.IntervalUnit), h.Interval).Warn("Setting up periodic heartbeat")
 	for {
 		h.Ping()
