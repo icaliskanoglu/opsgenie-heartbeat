@@ -64,8 +64,6 @@ spec:
             - name: heartbeat
               image: ghcr.io/icaliskanoglu/opsgenie-heartbeat:master
               env:
-                - name: PERIODIC
-                  value: true
                 - name: NAME
                   value: "Sample Heartbeat"
                 - name: API_KEY
@@ -93,6 +91,8 @@ spec:
       env:
         - name: NAME
           value: "Sample Heartbeat"
+        - name: PERIODIC
+          value: true
         - name: API_KEY
           valueFrom:
             secretKeyRef:
