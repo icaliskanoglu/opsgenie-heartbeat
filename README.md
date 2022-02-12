@@ -40,3 +40,60 @@ services:
       - NAME="Sample Heartbeat"
       - API_KEY="******"
 ```
+##### Kubernetes
+###### Cronjob
+```yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: heartbeat-example
+  namespace: default
+spec:
+  schedule: '*/1 * * * *'
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+            - name: busybox
+              image: busybox
+              command:
+                - echo
+                - initialized
+          containers:
+            - name: heartbeat
+              image: ghcr.io/icaliskanoglu/opsgenie-heartbeat:master
+              env:
+                - name: NAME
+                  value: "Sample Heartbeat"
+                - name: API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: opsgenie
+                      key: api-key
+          restartPolicy: OnFailure
+```
+
+###### Pod
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: heartbeat-pod-example
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.16.1
+      ports:
+        - containerPort: 80
+    - name: heartbeat
+      image: ghcr.io/icaliskanoglu/opsgenie-heartbeat:master
+      env:
+        - name: NAME
+          value: "Sample Heartbeat"
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: opsgenie
+              key: api-key
+```
