@@ -50,7 +50,7 @@ func (h *HeartbeatConfig) CreateOrUpdate() {
 	if !exist {
 		b, err := json.Marshal(h.Heartbeat)
 		if err != nil {
-			log.WithField("Heartbeat", h).Panicf("Could not marshall heartbeat!")
+			log.WithField("Heartbeat", h.Heartbeat).Panicf("Could not marshall heartbeat!")
 		}
 		requestBody := bytes.NewBuffer(b)
 		url := fmt.Sprintf("%s/v2/heartbeats", h.BaseUrl)
@@ -58,7 +58,7 @@ func (h *HeartbeatConfig) CreateOrUpdate() {
 	} else {
 		b, err := json.Marshal(h.Heartbeat.HeartbeatCore)
 		if err != nil {
-			log.WithField("Heartbeat", h).Panicf("Could not marshall heartbeat!")
+			log.WithField("Heartbeat", h.Heartbeat).Panicf("Could not marshall heartbeat!")
 		}
 		requestBody := bytes.NewBuffer(b)
 		url := fmt.Sprintf("%s/v2/heartbeats/%s", h.BaseUrl, h.Name)
@@ -140,11 +140,11 @@ func (h *HeartbeatConfig) PingPeriodiccally() {
 	totalDuration -= time.Second * 30
 
 	log.WithField(fmt.Sprintf("Interval(%s)", h.IntervalUnit), h.Interval).Warn("Setting up periodic heartbeat")
-	for {
-		h.Ping()
-		time.Sleep(totalDuration)
-	}
 
+	ticker := time.NewTicker(totalDuration)
+	for range ticker.C {
+		h.Ping()
+	}
 }
 
 func mustCreateRequest(method string, url string, body io.Reader) *http.Request {
