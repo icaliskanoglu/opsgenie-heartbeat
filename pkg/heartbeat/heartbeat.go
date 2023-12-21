@@ -49,6 +49,7 @@ func (h *HeartbeatConfig) CreateOrUpdate() {
 	exist := h.IsExist()
 	createUpdate := "create"
 	if !exist {
+		log.WithField("HeartbeatName", h.Name).Info("Creating heartbeat!")
 		b, err := json.Marshal(h.Heartbeat)
 		if err != nil {
 			log.WithField("Heartbeat", h.Heartbeat).Panicf("Could not marshall heartbeat!")
@@ -57,6 +58,7 @@ func (h *HeartbeatConfig) CreateOrUpdate() {
 		url := fmt.Sprintf("%s/v2/heartbeats", h.BaseUrl)
 		request = mustCreateRequest("POST", url, requestBody)
 	} else {
+		log.WithField("HeartbeatName", h.Name).Info("Updating heartbeat!")
 		b, err := json.Marshal(h.Heartbeat.HeartbeatCore)
 		if err != nil {
 			log.WithField("Heartbeat", h.Heartbeat).Panicf("Could not marshall heartbeat!")
