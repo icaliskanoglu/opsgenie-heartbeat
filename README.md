@@ -23,7 +23,7 @@ INFO[0003] Sending ping!                                 Heartbeat=IhsanTest
 | `INTERVAL`           | `false`   | `5`                         | Specifies how often a heartbeat message should be expected.                                                                              |
 | `INTERVAL_UNIT`      | `false`   | `minutes`                   | Interval specified as `minutes`, `hours` or `days`                                                                                       |
 | `ENABLED`            | `false`   | `true`                      | Enable/disable heartbeat monitoring                                                                                                      |
-| `PERIODIC`           | `false`   | `false`                     | The flag for to send heartbeat one time or periocically                                                                                  |
+| `ONE_TIME`           | `false`   | `false`                     | The flag for to send heartbeat one time                                                                                                  |
 | `TEAM`               | `false`   |                             | Owner team of the heartbeat, consisting id and/or name of the owner team                                                                 |
 | `DESCRIPTION`        | `false`   |                             | An optional description of the heartbeat                                                                                                 |
 | `ALERT_MESSAGE`      | `false`   | `HeartbeatName is expired`  | Specifies the alert message for heartbeat expiration alert. If this is not provided, default alert message is `HeartbeatName is expired` |
@@ -91,8 +91,6 @@ spec:
       env:
         - name: NAME
           value: "Sample Heartbeat"
-        - name: PERIODIC
-          value: true
         - name: API_KEY
           valueFrom:
             secretKeyRef:

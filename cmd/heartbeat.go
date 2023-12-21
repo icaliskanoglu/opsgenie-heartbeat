@@ -38,18 +38,19 @@ func main() {
 
 	heartbeat.ApiKey = *GetEnv("API_KEY", true, "")
 	heartbeat.BaseUrl = *GetEnv("BASE_URL", false, "https://api.opsgenie.com")
-	periodicStr := *GetEnv("PERIODIC", false, "true")
-	periodic, errPeriodic := strconv.ParseBool(periodicStr)
-	if errPeriodic != nil {
-		log.WithField("PERIODIC", periodic).Panicf("Could not parse PERIODIC to bool!")
+
+	oneTimeStr := *GetEnv("ONE_TIME", false, "false")
+	oneTime, errOneTime := strconv.ParseBool(oneTimeStr)
+	if errOneTime != nil {
+		log.WithField("ONE_TIME", oneTimeStr).Panicf("Could not parse ONE_TIME to bool!")
 	}
 
 	heartbeat.CreateOrUpdate()
 
-	if periodic {
-		heartbeat.PingPeriodically()
-	} else {
+	if oneTime {
 		heartbeat.Ping()
+	} else {
+		heartbeat.PingPeriodically()
 	}
 
 }
