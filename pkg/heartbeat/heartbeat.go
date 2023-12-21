@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"io"
 	"net/http"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type HeartbeatCore struct {
@@ -119,7 +120,7 @@ func (h *HeartbeatConfig) Ping() {
 	}
 }
 
-func (h *HeartbeatConfig) PingPeriodiccally() {
+func (h *HeartbeatConfig) PingPeriodically() {
 
 	var duration time.Duration
 	switch h.IntervalUnit {
@@ -136,13 +137,14 @@ func (h *HeartbeatConfig) PingPeriodiccally() {
 	}
 	totalDuration := time.Duration(h.Interval) * duration
 
-	//send ping before interval
+	// send ping before interval
 	totalDuration -= time.Second * 30
 
 	log.WithField(fmt.Sprintf("Interval(%s)", h.IntervalUnit), h.Interval).Warn("Setting up periodic heartbeat")
 
 	ticker := time.NewTicker(totalDuration)
-	for range ticker.C {
+
+	for ; ; <-ticker.C {
 		h.Ping()
 	}
 }

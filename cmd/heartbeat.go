@@ -1,10 +1,11 @@
 package main
 
 import (
-	log "github.com/sirupsen/logrus"
-	"opsgenie-heartbeat/pkg/heartbeat"
 	"os"
 	"strconv"
+
+	log "github.com/sirupsen/logrus"
+	"opsgenie-heartbeat/pkg/heartbeat"
 )
 
 func main() {
@@ -37,7 +38,7 @@ func main() {
 
 	heartbeat.ApiKey = *GetEnv("API_KEY", true, "")
 	heartbeat.BaseUrl = *GetEnv("BASE_URL", false, "https://api.opsgenie.com")
-	periodicStr := *GetEnv("PERIODIC", false, "false")
+	periodicStr := *GetEnv("PERIODIC", false, "true")
 	periodic, errPeriodic := strconv.ParseBool(periodicStr)
 	if errPeriodic != nil {
 		log.WithField("PERIODIC", periodic).Panicf("Could not parse PERIODIC to bool!")
@@ -46,7 +47,7 @@ func main() {
 	heartbeat.CreateOrUpdate()
 
 	if periodic {
-		heartbeat.PingPeriodiccally()
+		heartbeat.PingPeriodically()
 	} else {
 		heartbeat.Ping()
 	}
